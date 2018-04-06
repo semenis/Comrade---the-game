@@ -132,8 +132,8 @@ class Hero(Everything):
                 self.fire()
 
         elif event.type == pygame.MOUSEMOTION:
-            self.direction = int(math.degrees(math.atan2(self.rect.center[1] - event.pos[1],
-                                                         self.rect.center[0] - event.pos[0]))) - 90
+            self.direction = -int(math.degrees(math.atan2(self.rect.center[1] - event.pos[1],
+                                                         self.rect.center[0] - event.pos[0]))) - 270
 
             print(self.direction)
             self.image = pygame.transform.rotate(self.copy_images[self.current_frame], self.direction)
