@@ -22,6 +22,7 @@ pygame.init()
 size = width, height = (830, 385)
 speed = 200
 screen = pygame.display.set_mode(size)
+pygame.display.set_icon(pygame.image.load('data/icon.png'))
 screen.fill((0, 0, 0))
 redworld = load_image('redworld.png')
 

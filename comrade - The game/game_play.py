@@ -268,10 +268,10 @@ class Game_play:
         self.hero.render()
         self.all_sprites.draw(self.surface)
 
-
-if __name__ == '__main__':
+def main():
     size = width, height = (650, 385)
     screen = pygame.display.set_mode((size))
+    pygame.display.set_icon(pygame.image.load('data/icon.png'))
 
     spn = 0.001
     lon, lat = 13.406888, 52.517694
@@ -289,3 +289,7 @@ if __name__ == '__main__':
             game.update(event)
         game.render()
         pygame.display.flip()
+
+
+if __name__ == '__main__':
+    main()

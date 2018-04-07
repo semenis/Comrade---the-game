@@ -16,7 +16,7 @@ desanting(lon,lat)
 size = width,height = (650,385)
 screen = pygame.display.set_mode((size))
 pygame.display.flip()
-
+pygame.display.set_icon(pygame.image.load('data/icon.png'))
 pygame.init()
 
 # Рисуем картинку, загружаемую из только что созданного файла.
@@ -49,4 +49,6 @@ while running:
     screen.blit(pygame.image.load('data/mapscash/' + str(spnlen-1) + 'map.png'), (0, 0))
     pygame.time.wait(500)
     running = False
+from game_play import main
+main()
 pygame.quit()
