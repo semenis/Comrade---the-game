@@ -1,6 +1,7 @@
 import pygame
 import os
 import random
+import time
 
 def load_image(name, colorkey = None):
     fullname = os.path.join('data', name)
@@ -38,30 +39,33 @@ ID_TIMER = 10
 pygame.time.set_timer(ID_TIMER, 20)
 rotating = False
 
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == ID_TIMER:
-            if coords[1] < (height//2 - rect.h//2) and not rotating:
-                coords[1] += 1
+def loading(delay):
+    start = time.time()
+    print(start)
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == ID_TIMER:
+                if coords[1] < (height//2 - rect.h//2) and not rotating:
+                    coords[1] += 1
 
-            else:
-                rotating = True
-                image1 = pygame.transform.rotate(image, agle)
-                rect1 = image1.get_rect()
-                coords = (center[0] - rect1.width // 2, center[1] - rect1.height // 2)
-                agle += 1
-                if agle >= 359:
-                    agle = 0
-                # Не работает нормально
-                # Приделал костыль
+                else:
+                    rotating = True
+                    image1 = pygame.transform.rotate(image, agle)
+                    rect1 = image1.get_rect()
+                    coords = (center[0] - rect1.width // 2, center[1] - rect1.height // 2)
+                    agle += 1
+                    if agle >= 359:
+                        agle = 0
+                    # Не работает нормально
+                    # Приделал костыль
 
-    screen.fill((0, 0, 0))
-    screen.blit(redworld, (0, 0))
-    screen.blit(image1, coords)
+        screen.fill((0, 0, 0))
+        screen.blit(redworld, (0, 0))
+        screen.blit(image1, coords)
 
-    # print("Loading data"+random.randint(1, 3)*'.')
-    pygame.display.flip()
+        # print("Loading data"+random.randint(1, 3)*'.')
+        pygame.display.flip()
 
-pygame.quit()
+    pygame.quit()
