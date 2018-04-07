@@ -133,7 +133,7 @@ class Hero(Everything):
 
         elif event.type == pygame.MOUSEMOTION:
             self.direction = -int(math.degrees(math.atan2(self.rect.center[1] - event.pos[1],
-                                                         self.rect.center[0] - event.pos[0]))) - 270
+                                                          self.rect.center[0] - event.pos[0]))) + 90
 
             print(self.direction)
             self.image = pygame.transform.rotate(self.copy_images[self.current_frame], self.direction)
@@ -151,7 +151,6 @@ class Hero(Everything):
             if event.key in [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT]:
                 self.pressed = False
 
-
     def update(self):
         changed = False
         if self.pressed in [pygame.K_UP, pygame.K_DOWN]:
@@ -167,18 +166,18 @@ class Hero(Everything):
             # self.lon += math.cos(math.radians(self.direction)) * self.CONST_SPEED * 0.0001
             # self.lat -= math.sin(math.radians(self.direction)) * self.CONST_SPEED * 0.0001
             self.old_rect.x += delta_x
-            self.old_rect.y += delta_y
+            self.old_rect.y -= delta_y
 
             self.rect.x += delta_x
-            self.rect.y += delta_y
+            self.rect.y -= delta_y
             # changed = True
 
         elif self.pressed == pygame.K_LEFT:
-            self.old_rect.x -= delta_x
-            self.old_rect.y -= delta_y
+                self.old_rect.x -= delta_x
+                self.old_rect.y += delta_y
 
-            self.rect.x -= delta_x
-            self.rect.y -= delta_y
+                self.rect.x -= delta_x
+                self.rect.y += delta_y
 
         elif self.pressed == pygame.K_UP:
             self.old_rect.x += delta_x
