@@ -17,30 +17,30 @@ def load_image(name, colorkey = None):
         image.set_colorkey(colorkey)
     return image
 
-
-pygame.init()
-size = width, height = (830, 385)
-speed = 200
-screen = pygame.display.set_mode(size)
-pygame.display.set_icon(pygame.image.load('data/icon.png'))
-screen.fill((0, 0, 0))
-redworld = load_image('redworld.png')
-
-image = load_image('has100.png')
-running = True
-rect = image.get_rect()
-coords = [width//2 - rect.w//2, 0]
-center = (width//2, height//2)
-
-image1 = image
-agle = 0
-
-
-ID_TIMER = 10
-pygame.time.set_timer(ID_TIMER, 20)
-rotating = False
-
 def loading(delay):
+    pygame.init()
+    size = width, height = (830, 385)
+    speed = 200
+    screen = pygame.display.set_mode(size)
+    pygame.display.set_icon(pygame.image.load('data/icon.png'))
+    screen.fill((0, 0, 0))
+    redworld = load_image('redworld.png')
+
+    image = load_image('has100.png')
+    running = True
+    rect = image.get_rect()
+    coords = [width//2 - rect.w//2, 0]
+    center = (width//2, height//2)
+
+    image1 = image
+    agle = 0
+
+
+    ID_TIMER = 10
+    pygame.time.set_timer(ID_TIMER, 20)
+    rotating = False
+
+
     start = time.time()
     print(start)
     while running:
@@ -70,3 +70,4 @@ def loading(delay):
         pygame.display.flip()
 
     pygame.quit()
+loading(100)
