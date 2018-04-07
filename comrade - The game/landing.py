@@ -10,6 +10,7 @@ lon, lat = 13.406888, 52.517481
 from desanting import desanting
 
 #При тестировании запустить один раз и закомментить, оно все скачает и норм
+#TODO добавить "import loading" в параллельный процесс, пока качаются картинки...
 desanting(lon,lat)
 
 size = width,height = (650,385)
