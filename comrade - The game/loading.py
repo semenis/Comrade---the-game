@@ -1,9 +1,9 @@
 import pygame
 import os
-import random
 import time
 
-def load_image(name, colorkey = None):
+
+def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
     try:
         image = pygame.image.load(fullname)
@@ -16,6 +16,7 @@ def load_image(name, colorkey = None):
             colorkey = image.get_at((0, 0))
         image.set_colorkey(colorkey)
     return image
+
 
 def loading(delay):
     pygame.init()
@@ -34,17 +35,15 @@ def loading(delay):
     image = load_image('has100.png')
     running = True
     rect = image.get_rect()
-    coords = [width//2 - rect.w//2, 0]
-    center = (width//2, height//2)
+    coords = [width // 2 - rect.w // 2, 0]
+    center = (width // 2, height // 2)
 
     image1 = image
     agle = 0
 
-
     ID_TIMER = 10
     pygame.time.set_timer(ID_TIMER, 20)
     rotating = False
-
 
     start = time.time()
     print(start)
@@ -53,7 +52,7 @@ def loading(delay):
             if event.type == pygame.QUIT:
                 running = False
             if event.type == ID_TIMER:
-                if coords[1] < (height//2 - rect.h//2) and not rotating:
+                if coords[1] < (height // 2 - rect.h // 2) and not rotating:
                     coords[1] += 1
 
                 else:
@@ -70,10 +69,10 @@ def loading(delay):
         screen.fill((0, 0, 0))
         screen.blit(redworld, (0, 0))
         screen.blit(image1, coords)
-        if time.time()-start > delay:
+        if time.time() - start > delay:
             running = False
         # print("Loading data"+random.randint(1, 3)*'.')
         pygame.display.flip()
 
     pygame.quit()
-#loading(1500)
+# loading(1500)

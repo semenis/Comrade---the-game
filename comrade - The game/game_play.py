@@ -6,6 +6,7 @@ import math
 import copy
 import threading
 
+
 def map_request(lon, lat, layer, spn):
     try:
         api_server = "http://static-maps.yandex.ru/1.x/"
@@ -40,7 +41,7 @@ def write_image(response):
         sys.exit(2)
 
 
-def load_image(name, colorkey = None):
+def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
     try:
         image = pygame.image.load(fullname)
@@ -113,7 +114,11 @@ class Hero(Everything):
         self.old_rect = copy.deepcopy(self.rect)
 
     def fire(self):
-        Bullet(self.bullets, coors=(self.rect.x + self.rect.w//2, self.rect.y + self.rect.h//2), direction=self.direction)
+        #  pygame.mixer.init()
+        # pygame.mixer.music.load("data/piu.mp3")
+        # pygame.mixer.music.play(0)
+        Bullet(self.bullets, coors=(self.rect.x + self.rect.w // 2, self.rect.y + self.rect.h // 2),
+               direction=self.direction)
 
     def players_control(self, event):
         if event.type == pygame.KEYDOWN:
@@ -140,7 +145,7 @@ class Hero(Everything):
             old_center = ((self.rect.x + self.rect.w // 2), (self.rect.y + self.rect.h // 2))
             new_center = ((self.rect.x + rect1.w // 2), (self.rect.y + rect1.h // 2))
             coors = (
-            self.old_rect.x - (new_center[0] - old_center[0]), self.old_rect.y - (new_center[1] - old_center[1]))
+                self.old_rect.x - (new_center[0] - old_center[0]), self.old_rect.y - (new_center[1] - old_center[1]))
             self.rect.x = coors[0]
             self.rect.y = coors[1]
             self.motion = False
@@ -170,11 +175,11 @@ class Hero(Everything):
             # changed = True
 
         elif self.pressed == pygame.K_LEFT:
-                self.old_rect.x -= delta_x
-                self.old_rect.y += delta_y
+            self.old_rect.x -= delta_x
+            self.old_rect.y += delta_y
 
-                self.rect.x -= delta_x
-                self.rect.y += delta_y
+            self.rect.x -= delta_x
+            self.rect.y += delta_y
 
         elif self.pressed == pygame.K_UP:
             self.old_rect.x += delta_x
@@ -212,7 +217,7 @@ class Hero(Everything):
             self.response = map_request(self.lon, self.lat, self.layer, self.spn)
             write_image(self.response)
             self.location = load_image("map.png")
-            self.rect.x, self.rect.y = self.center[0] - self.rect.w//2, self.center[1] - self.rect.h//2
+            self.rect.x, self.rect.y = self.center[0] - self.rect.w // 2, self.center[1] - self.rect.h // 2
             # self.rect.right = self.rect.x + self.rect.w
             # self.rect.bottom = self.rect.y + self.rect.h
             self.old_rect = copy.deepcopy(self.rect)
@@ -253,13 +258,13 @@ class Game_play:
         self.enemies = []
         self.all_sprites = pygame.sprite.Group()
         self.surface = surface
-        self.center = (size[0]//2, size[1]//2)
+        self.center = (size[0] // 2, size[1] // 2)
 
         self.Bullets = pygame.sprite.Group()
         self.Units = pygame.sprite.Group()
-        self.hero = Hero(self.all_sprites, self.Units, center=self.center, bullets=self.Bullets, coors=(self.center[0] - 50, self.center[1] - 50),
+        self.hero = Hero(self.all_sprites, self.Units, center=self.center, bullets=self.Bullets,
+                         coors=(self.center[0] - 50, self.center[1] - 50),
                          surface=surface, size=size, lon=lon, lat=lat, layer=layer, spn=spn)
-
 
     def hero_updater(self):
         self.hero.update()
@@ -280,11 +285,11 @@ class Game_play:
         for i in self.threading_update:
             i.join()
 
-
     def render(self):
         self.hero.render()
         self.all_sprites.draw(self.surface)
         self.Bullets.draw(self.surface)
+
 
 def main():
     size = width, height = (650, 385)

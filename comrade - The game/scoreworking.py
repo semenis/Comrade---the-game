@@ -27,5 +27,5 @@ def scoresetvalue(value, name):
 def clearscore():
     with open('data/score', 'w') as file:
         file.write(str(
-            {'kills': 0, 'desanting times': 0, 'rang': 'comrade robot', 'exp' : 0, 'current coordinats': (13.406888,
-                                                                                               52.517694)}) + '\n#При изменении количества значений, измените значения по умолчанию в scoreworking.py')
+            {'kills': 0, 'desanting times': 0, 'rang': 'comrade robot', 'exp': 0, 'current coordinats': (13.406888,
+                                                                                                         52.517694)}) + '\n#При изменении количества значений, измените значения по умолчанию в scoreworking.py')

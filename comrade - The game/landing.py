@@ -54,15 +54,18 @@ while running:
         pygame.time.wait(delay)
         screen.blit(pygame.image.load('data/mapscash/' + str(i) + 'map.png'), (0, 0))
         wind_power = 10
+        coords = (230, 100)
         screen.blit(pygame.image.load('data/parashut.png'),
-                    (230 + random.randrange(-wind_power, wind_power), 100 + random.randrange(-wind_power, wind_power)))
+                    (coords[0] + random.randrange(-wind_power, wind_power),
+                     coords[1] + random.randrange(-wind_power, wind_power)))
         pygame.display.flip()
     pygame.display.flip()
     screen.blit(pygame.image.load('data/mapscash/' + str(spnlen - 1) + 'map.png'), (0, 0))
     import scoreworking
-    scoreworking.intscorechange(1,'desanting times')
 
-    pygame.time.wait(500)
+    scoreworking.intscorechange(1, 'desanting times')
+    inlandtimedelay = 500
+    pygame.time.wait(inlandtimedelay)
     running = False
 from game_play import main
 

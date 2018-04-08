@@ -1,5 +1,5 @@
 from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram import ReplyKeyboardMarkup
 import time
 import os
 
@@ -10,9 +10,8 @@ bot_token = config.telegram_bot_api_key
 reply_keyboard = [['/score', '/rules'], ['/quests', '/up_my_rang']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
-quests = ['kills','desanting times','exp']
+quests = ['kills', 'desanting times', 'exp']
 points = [1, 5, 20, 50, 100, 500, 1000, 5000]
-
 
 rangs = {0: 'comrade robot', 10: 'Private', 30: 'Ensign', 50: 'Lieutenant', 100: 'Commandante', 500: 'Captain',
          2000: 'Red Army General'}
@@ -82,7 +81,7 @@ def quests_(bot, update):
         a = scoreworking.downloadscore()
         kolvo = a[i]
         print(kolvo)
-        c=[]
+        c = []
         global points
         target = 0
         for j in points:
@@ -93,7 +92,7 @@ def quests_(bot, update):
             except:
                 pass
         if target != 0:
-            update.message.reply_text(i + ' ' + str(target) + '\nОсталось ' + str(target-kolvo))
+            update.message.reply_text(i + ' ' + str(target) + '\nОсталось ' + str(target - kolvo))
 
 
 def up_my_rang(bot, update):
@@ -108,7 +107,6 @@ def up_my_rang(bot, update):
             c.append(i)
     update.message.reply_text('Вы заслуживаете ранг: ' + rangs[max(c)])
     scoreworking.scoresetvalue(rangs[max(c)], 'rang')
-
 
 
 # Запускаем функцию main() в случае запуска скрипта.
