@@ -76,4 +76,4 @@ def loading(delay):
         pygame.display.flip()
 
     pygame.quit()
-loading(1500)
+#loading(1500)
