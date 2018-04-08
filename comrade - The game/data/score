@@ -1,2 +1,2 @@
-{'kills': 0, 'desanting times': 0, 'rang': 'comrade robot', 'current coordinats': (13.406888, 52.517694)}
+{'kills': 0, 'desanting times': 0, 'rang': 'comrade robot', 'exp': 0, 'current coordinats': (13.406888, 52.517694)}
 #При изменении количества значений, измените значения по умолчанию в scoreworking.py
