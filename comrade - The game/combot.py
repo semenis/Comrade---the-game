@@ -7,8 +7,15 @@ import config
 
 bot_token = config.telegram_bot_api_key
 
-reply_keyboard = [['/score', '/rules']]
+reply_keyboard = [['/score', '/rules'], ['/quests', '/up_my_rang']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
+
+quests = ['kills']
+points = [1, 5, 20, 50, 100, 500, 1000, 5000]
+
+
+rangs = {0: 'comrade robot', 10: 'Private', 30: 'Ensign', 50: 'Lieutenant', 100: 'Commandante', 500: 'Captain',
+         2000: 'Red army general'}
 
 
 # Определяем функцию-обработчик сообщений.
@@ -37,6 +44,8 @@ def main():
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("score", score))
     dp.add_handler(CommandHandler("rules", rules))
+    dp.add_handler(CommandHandler("quests", quests_))
+    dp.add_handler(CommandHandler("up_my_rang", up_my_rang))
     # Запускаем цикл приема и обработки сообщений.
     updater.start_polling()
 
@@ -64,6 +73,40 @@ def score(bot, update):
 def rules(bot, update):
     update.message.reply_text(
         "Ваша задача десантироваться на вражескую территорию и передвигаясь по карте, уничтожить врагов коммунизма, играя за гиганского робота. Вперед к победе, Comrade!")
+
+
+def quests_(bot, update):
+    update.message.reply_text('Ваши текущие квесты:')
+    for i in quests:
+        import scoreworking
+        a = scoreworking.downloadscore()
+        kolvo = a[i]
+        print(kolvo)
+        c=[]
+        global points
+        for j in points:
+            if kolvo < j:
+                c.append(j)
+            target = min(c)
+
+        if not target:
+            target = 0
+        update.message.reply_text(i + ' ' + str(j) + ' times ' + '\nОсталось ' + str(target-kolvo))
+
+
+def up_my_rang(bot, update):
+    import scoreworking
+    a = scoreworking.downloadscore()
+    update.message.reply_text('Ваш текущий ранг: ' + a['rang'])
+    exp = a['exp']
+    update.message.reply_text('Ваш опыт: ' + str(exp))
+    c = []
+    for i in rangs.keys():
+        if exp > i:
+            c.append(i)
+    update.message.reply_text('Вы заслуживаете ранг: ' + rangs[max(c)])
+    scoreworking.scoresetvalue(rangs[max(c)], 'rang')
+
 
 
 # Запускаем функцию main() в случае запуска скрипта.
