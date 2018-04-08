@@ -24,6 +24,11 @@ def loading(delay):
     screen = pygame.display.set_mode(size)
     pygame.display.set_icon(pygame.image.load('data/icon.png'))
     screen.fill((0, 0, 0))
+
+    pygame.mixer.init()
+    pygame.mixer.music.load("data/ost.mp3")
+    pygame.mixer.music.play(0)
+
     redworld = load_image('redworld.png')
 
     image = load_image('has100.png')
@@ -71,4 +76,4 @@ def loading(delay):
         pygame.display.flip()
 
     pygame.quit()
-#loading(15)
+loading(1500)
