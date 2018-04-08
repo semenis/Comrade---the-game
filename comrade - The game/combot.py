@@ -50,8 +50,8 @@ def start(bot, update):
 
 def score(bot, update):
     try:
-        with open('data/score') as file:
-            a = eval(file.readline())
+        import scoreworking
+        a = scoreworking.downloadscore()
         update.message.reply_text("Вы убили " + str(a['kills']) + " врагов.")
         update.message.reply_text("Вы десантировались " + str(a['desanting times']) + " раз.")
         update.message.reply_text("Ваш ранг " + str(a['rang']))
