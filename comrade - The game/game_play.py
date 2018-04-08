@@ -90,13 +90,13 @@ class Everything(pygame.sprite.Sprite):
 
 
 class Hero(Everything):
-    def __init__(self, *group, center, coors, surface, size, lon, lat, layer, spn):
+    def __init__(self, *group, bullets, center, coors, surface, size, lon, lat, layer, spn):
         self.CONST_SPEED = 2
         self.direction = 0
         self.center = center
         self.size = size
         images = ["Hero/" + file for file in os.listdir("data/Hero")]
-
+        self.bullets = bullets
         self.pressed = False
 
         self.response = None
@@ -105,7 +105,6 @@ class Hero(Everything):
         self.lat = lat
         self.layer = layer
         self.spn = spn
-
         self.response = map_request(self.lon, self.lat, self.layer, self.spn)
         write_image(self.response)
         self.location = load_image("map.png")
@@ -113,9 +112,8 @@ class Hero(Everything):
         super().__init__(*group, coors=coors, images=images, loading=True)
         self.old_rect = copy.deepcopy(self.rect)
 
-
     def fire(self):
-        pass
+        Bullet(self.bullets, coors=(self.rect.x + self.rect.w//2, self.rect.y + self.rect.h//2), direction=self.direction)
 
     def players_control(self, event):
         if event.type == pygame.KEYDOWN:
@@ -235,8 +233,18 @@ class Enemy(Everything):
 
 
 class Bullet(Everything):
-    def __init__(self):
-        pass
+    def __init__(self, *group, coors, direction):
+        self.CONST_SPEED = 10
+        self.direction = direction
+        self.images = ['Weapon/Bullet.png']
+        super().__init__(group, coors=coors, images=self.images, loading=True)
+        self.image = pygame.transform.rotate(self.image, self.direction)
+
+    def update(self):
+        delta_x = -int(round(math.cos(math.radians(self.direction + 90)))) * self.CONST_SPEED
+        delta_y = -int(round(math.sin(math.radians(self.direction + 90)))) * self.CONST_SPEED
+        self.rect.x -= delta_x
+        self.rect.y += delta_y
 
 
 class Game_play:
@@ -246,18 +254,27 @@ class Game_play:
         self.all_sprites = pygame.sprite.Group()
         self.surface = surface
         self.center = (size[0]//2, size[1]//2)
-        self.hero = Hero(self.all_sprites, center=self.center, coors=(self.center[0] - 50, self.center[1] - 50),
+
+        self.Bullets = pygame.sprite.Group()
+        self.Units = pygame.sprite.Group()
+        self.hero = Hero(self.all_sprites, self.Units, center=self.center, bullets=self.Bullets, coors=(self.center[0] - 50, self.center[1] - 50),
                          surface=surface, size=size, lon=lon, lat=lat, layer=layer, spn=spn)
+
 
     def hero_updater(self):
         self.hero.update()
+
+    def Bullets_update(self):
+        for bullet in self.Bullets:
+            bullet.update()
 
     def event_tracker(self, event):
         self.hero.players_control(event)
 
     def update(self, event):
         self.threading_update = [threading.Thread(target=self.event_tracker(event)),
-                                 threading.Thread(target=self.hero_updater)]
+                                 threading.Thread(target=self.hero_updater),
+                                 threading.Thread(target=self.Bullets_update)]
         for i in self.threading_update:
             i.start()
         for i in self.threading_update:
@@ -267,10 +284,11 @@ class Game_play:
     def render(self):
         self.hero.render()
         self.all_sprites.draw(self.surface)
+        self.Bullets.draw(self.surface)
 
 def main():
     size = width, height = (650, 385)
-    screen = pygame.display.set_mode((size))
+    screen = pygame.display.set_mode(size)
     pygame.display.set_icon(pygame.image.load('data/icon.png'))
 
     spn = 0.001
