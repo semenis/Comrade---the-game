@@ -65,9 +65,10 @@ def loading(delay):
         screen.fill((0, 0, 0))
         screen.blit(redworld, (0, 0))
         screen.blit(image1, coords)
-
+        if time.time()-start > delay:
+            running = False
         # print("Loading data"+random.randint(1, 3)*'.')
         pygame.display.flip()
 
     pygame.quit()
-loading(100)
+#loading(15)
