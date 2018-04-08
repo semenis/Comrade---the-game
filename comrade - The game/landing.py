@@ -2,15 +2,28 @@ import requests
 import sys
 import os
 import pygame
+import _thread
 
 spn = 25
 lon, lat = 13.406888, 52.517481
 
 from desanting import desanting
 
-# При тестировании запустить один раз и закомментить, оно все скачает и норм
-# TODO добавить "import loading" в параллельный процесс, пока качаются картинки...
+l = _thread.allocate_lock()  # создаём блокировку
+
+
+def load():
+    delay_ = 17
+    from loading import loading
+    loading(delay_)
+    l.acquire()
+
+
+_thread.start_new_thread(load, ())
 desanting(lon, lat)
+
+while not l.locked():
+    pass
 
 size = width, height = (650, 385)
 screen = pygame.display.set_mode((size))
