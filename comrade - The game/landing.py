@@ -30,6 +30,8 @@ screen = pygame.display.set_mode((size))
 pygame.display.flip()
 pygame.display.set_icon(pygame.image.load('data/icon.png'))
 pygame.init()
+pygame.mixer.init()
+pygame.mixer.music.load("data/wind.mp3")
 
 # Рисуем картинку, загружаемую из только что созданного файла.
 
@@ -39,7 +41,7 @@ import random
 
 running = True
 vistrels = []
-
+pygame.mixer.music.play(0)
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -61,12 +63,14 @@ while running:
         pygame.display.flip()
     pygame.display.flip()
     screen.blit(pygame.image.load('data/mapscash/' + str(spnlen - 1) + 'map.png'), (0, 0))
+
     import scoreworking
 
     scoreworking.intscorechange(1, 'desanting times')
     inlandtimedelay = 500
     pygame.time.wait(inlandtimedelay)
     running = False
+pygame.mixer.music.stop()
 from game_play import main
 
 main()
