@@ -10,12 +10,12 @@ bot_token = config.telegram_bot_api_key
 reply_keyboard = [['/score', '/rules'], ['/quests', '/up_my_rang']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=False)
 
-quests = ['kills']
+quests = ['kills','desanting times','exp']
 points = [1, 5, 20, 50, 100, 500, 1000, 5000]
 
 
 rangs = {0: 'comrade robot', 10: 'Private', 30: 'Ensign', 50: 'Lieutenant', 100: 'Commandante', 500: 'Captain',
-         2000: 'Red army general'}
+         2000: 'Red Army General'}
 
 
 # Определяем функцию-обработчик сообщений.
@@ -84,14 +84,16 @@ def quests_(bot, update):
         print(kolvo)
         c=[]
         global points
+        target = 0
         for j in points:
             if kolvo < j:
                 c.append(j)
-            target = min(c)
-
-        if not target:
-            target = 0
-        update.message.reply_text(i + ' ' + str(j) + ' times ' + '\nОсталось ' + str(target-kolvo))
+            try:
+                target = min(c)
+            except:
+                pass
+        if target != 0:
+            update.message.reply_text(i + ' ' + str(target) + '\nОсталось ' + str(target-kolvo))
 
 
 def up_my_rang(bot, update):

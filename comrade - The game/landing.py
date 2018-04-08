@@ -59,6 +59,9 @@ while running:
         pygame.display.flip()
     pygame.display.flip()
     screen.blit(pygame.image.load('data/mapscash/' + str(spnlen - 1) + 'map.png'), (0, 0))
+    import scoreworking
+    scoreworking.intscorechange(1,'desanting times')
+
     pygame.time.wait(500)
     running = False
 from game_play import main
