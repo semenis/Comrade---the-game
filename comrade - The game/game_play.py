@@ -5,7 +5,7 @@ import os
 import math
 import copy
 import threading
-
+import random
 
 def map_request(lon, lat, layer, spn):
     try:
@@ -41,7 +41,7 @@ def write_image(response):
         sys.exit(2)
 
 
-def load_image(name, colorkey=None):
+def load_image(name, colorkey = None):
     fullname = os.path.join('data', name)
     try:
         image = pygame.image.load(fullname)
@@ -91,13 +91,17 @@ class Everything(pygame.sprite.Sprite):
 
 
 class Hero(Everything):
-    def __init__(self, *group, bullets, center, coors, surface, size, lon, lat, layer, spn):
+    def __init__(self, *group, center, coors, surface, size, bullets, lon, lat, layer, spn):
         self.CONST_SPEED = 2
+
+        self.health = 100
+        self.health_rect = pygame.Surface([100, 5])
+        self.health_rect.fill((255, 0, 0))
+
         self.direction = 0
         self.center = center
         self.size = size
         images = ["Hero/" + file for file in os.listdir("data/Hero")]
-        self.bullets = bullets
         self.pressed = False
 
         self.response = None
@@ -109,16 +113,14 @@ class Hero(Everything):
         self.response = map_request(self.lon, self.lat, self.layer, self.spn)
         write_image(self.response)
         self.location = load_image("map.png")
+        self.Bullets = bullets
 
         super().__init__(*group, coors=coors, images=images, loading=True)
         self.old_rect = copy.deepcopy(self.rect)
 
     def fire(self):
-        #  pygame.mixer.init()
-        # pygame.mixer.music.load("data/piu.mp3")
-        # pygame.mixer.music.play(0)
-        Bullet(self.bullets, coors=(self.rect.x + self.rect.w // 2, self.rect.y + self.rect.h // 2),
-               direction=self.direction)
+        Bullet(self.Bullets,
+               coors=(self.rect.x + self.rect.w // 2, self.rect.y + self.rect.h // 2), direction=self.direction)
 
     def players_control(self, event):
         if event.type == pygame.KEYDOWN:
@@ -145,7 +147,7 @@ class Hero(Everything):
             old_center = ((self.rect.x + self.rect.w // 2), (self.rect.y + self.rect.h // 2))
             new_center = ((self.rect.x + rect1.w // 2), (self.rect.y + rect1.h // 2))
             coors = (
-                self.old_rect.x - (new_center[0] - old_center[0]), self.old_rect.y - (new_center[1] - old_center[1]))
+            self.old_rect.x - (new_center[0] - old_center[0]), self.old_rect.y - (new_center[1] - old_center[1]))
             self.rect.x = coors[0]
             self.rect.y = coors[1]
             self.motion = False
@@ -155,14 +157,23 @@ class Hero(Everything):
                 self.pressed = False
 
     def update(self):
+        if self.health < 1:
+            return False
+        self.health_rect = pygame.Surface([self.health, 5])
+        self.health_rect.fill((255, 0, 0))
+
+        if self.pressed:
+            self.update_frame()
+            self.image = pygame.transform.rotate(self.copy_images[self.current_frame], self.direction)
+        else:
+            self.current_frame = 0
+
         if self.pressed in [pygame.K_UP, pygame.K_DOWN]:
             delta_x = int(round(math.cos(math.radians(self.direction + 90)))) * self.CONST_SPEED
             delta_y = int(round(math.sin(math.radians(self.direction + 90)))) * self.CONST_SPEED
         elif self.pressed in [pygame.K_RIGHT, pygame.K_LEFT]:
             delta_x = int(round(math.cos(math.radians(self.direction)))) * self.CONST_SPEED
             delta_y = int(round(math.sin(math.radians(self.direction)))) * self.CONST_SPEED
-        else:
-            delta_x, delta_y = 0, 0
 
         if self.pressed == pygame.K_RIGHT:
             # self.lon += math.cos(math.radians(self.direction)) * self.CONST_SPEED * 0.0001
@@ -175,11 +186,11 @@ class Hero(Everything):
             # changed = True
 
         elif self.pressed == pygame.K_LEFT:
-            self.old_rect.x -= delta_x
-            self.old_rect.y += delta_y
+                self.old_rect.x -= delta_x
+                self.old_rect.y += delta_y
 
-            self.rect.x -= delta_x
-            self.rect.y += delta_y
+                self.rect.x -= delta_x
+                self.rect.y += delta_y
 
         elif self.pressed == pygame.K_UP:
             self.old_rect.x += delta_x
@@ -188,10 +199,10 @@ class Hero(Everything):
             self.rect.y -= delta_y
 
         elif self.pressed == pygame.K_DOWN:
-            self.old_rect.x += delta_x
+            self.old_rect.x -= delta_x
             self.old_rect.y += delta_y
 
-            self.rect.x += delta_x
+            self.rect.x -= delta_x
             self.rect.y += delta_y
 
         BORDER = 30
@@ -217,7 +228,7 @@ class Hero(Everything):
             self.response = map_request(self.lon, self.lat, self.layer, self.spn)
             write_image(self.response)
             self.location = load_image("map.png")
-            self.rect.x, self.rect.y = self.center[0] - self.rect.w // 2, self.center[1] - self.rect.h // 2
+            self.rect.x, self.rect.y = self.center[0] - self.rect.w//2, self.center[1] - self.rect.h//2
             # self.rect.right = self.rect.x + self.rect.w
             # self.rect.bottom = self.rect.y + self.rect.h
             self.old_rect = copy.deepcopy(self.rect)
@@ -225,6 +236,7 @@ class Hero(Everything):
     def render(self):
         self.surface.blit(self.location, (0, 0))
         self.surface.blit(self.image, self.rect)
+        self.surface.blit(self.health_rect, (self.size[0] - 110, self.size[1] - 20))
 
 
 class Loot(Everything):
@@ -233,8 +245,42 @@ class Loot(Everything):
 
 
 class Enemy(Everything):
-    def __init__(self):
-        pass
+    def __init__(self, *group, health, coors, hero):
+        self.CONST_SPEED = 8
+        self.hero = hero
+
+        self.images = ['Enemies/Enemy.jpg']
+        super().__init__(group, coors=coors, images=self.images, loading=True)
+        self.direction = -int(math.degrees(math.atan2(self.rect.center[1] - self.hero.rect.y,
+                                                      self.rect.center[0] - self.hero.rect.x))) + 90
+
+        self.image = pygame.transform.rotate(self.image, self.direction)
+        self.health = health
+        self.ID = 2
+        pygame.time.set_timer(self.ID, 3000)
+
+    def update(self, event):
+        if event.type == self.ID:
+            pass
+
+        delta_x = -int(round(math.cos(math.radians(self.direction + 90)))) * self.CONST_SPEED
+        delta_y = -int(round(math.sin(math.radians(self.direction + 90)))) * self.CONST_SPEED
+        self.rect.x -= delta_x
+        self.rect.y += delta_y
+
+        if event.type == pygame.MOUSEMOTION:
+            self.direction = -int(math.degrees(math.atan2(self.rect.center[1] - self.hero.rect.center[1],
+                                                          self.rect.center[0] - self.hero.rect.center[0]))) + 90
+
+            self.image = pygame.transform.rotate(self.copy_images[self.current_frame], self.direction)
+            rect1 = self.image.get_rect()
+
+            old_center = ((self.rect.x + self.rect.w // 2), (self.rect.y + self.rect.h // 2))
+            new_center = ((self.rect.x + rect1.w // 2), (self.rect.y + rect1.h // 2))
+            coors = (
+            self.old_rect.x - (new_center[0] - old_center[0]), self.old_rect.y - (new_center[1] - old_center[1]))
+            self.rect.x = coors[0]
+            self.rect.y = coors[1]
 
 
 class Bullet(Everything):
@@ -258,13 +304,13 @@ class Game_play:
         self.enemies = []
         self.all_sprites = pygame.sprite.Group()
         self.surface = surface
-        self.center = (size[0] // 2, size[1] // 2)
+        self.center = (size[0]//2, size[1]//2)
+        self.size = size
 
         self.Bullets = pygame.sprite.Group()
         self.Units = pygame.sprite.Group()
-        self.hero = Hero(self.all_sprites, self.Units, center=self.center, bullets=self.Bullets,
-                         coors=(self.center[0] - 50, self.center[1] - 50),
-                         surface=surface, size=size, lon=lon, lat=lat, layer=layer, spn=spn)
+        self.hero = Hero(self.all_sprites, self.Units, center=self.center, coors=(self.center[0] - 50, self.center[1] - 50),
+                         surface=surface, size=size, bullets=self.Bullets, lon=lon, lat=lat, layer=layer, spn=spn)
 
     def hero_updater(self):
         self.hero.update()
@@ -280,15 +326,24 @@ class Game_play:
         self.threading_update = [threading.Thread(target=self.event_tracker(event)),
                                  threading.Thread(target=self.hero_updater),
                                  threading.Thread(target=self.Bullets_update)]
+        for sprite in self.all_sprites:
+            if not -50 < sprite.rect.x < self.size[0] + 50 or not -50 < sprite.rect.y < self.size[1] + 50:
+                sprite.kill()
+
         for i in self.threading_update:
             i.start()
         for i in self.threading_update:
             i.join()
 
+        if len(self.Units) < 2:
+            for i in range(random.randint(1, 5)):  # def __init__(self, *group, health, coors, direction):
+                Enemy(self.Units, self.all_sprites, health=random.randint(50, 200), coors=(random.randint(0, self.size[0]),
+                                                                                           random.randint(0, self.size[1])),
+                      hero=self.hero)
+
     def render(self):
         self.hero.render()
         self.all_sprites.draw(self.surface)
-        self.Bullets.draw(self.surface)
 
 
 def main():
