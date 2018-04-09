@@ -249,7 +249,7 @@ class Enemy(Everything):
         self.CONST_SPEED = 8
         self.hero = hero
 
-        self.images = ['Enemies/Enemy.jpg']
+        self.images = ['Enemies/Enemy.png']
         super().__init__(group, coors=coors, images=self.images, loading=True)
         self.direction = -int(math.degrees(math.atan2(self.rect.center[1] - self.hero.rect.y,
                                                       self.rect.center[0] - self.hero.rect.x))) + 90
