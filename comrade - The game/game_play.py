@@ -283,6 +283,9 @@ class Enemy(Everything):
             if bullet.comand != 2:
                 self.health -= bullet.damage
                 if self.health < 1:
+                    import scoreworking
+                    scoreworking.intscorechange(1)
+                    scoreworking.intscorechange(1, name='exp')
                     self.kill()
                 bullet.kill()
         if event.type == 2 and event.type != pygame.MOUSEMOTION:
@@ -352,7 +355,7 @@ class Game_play:
                          surface=surface, size=size, bullets=self.Bullets, lon=lon, lat=lat, layer=layer, spn=spn,
                          all_sprites=self.all_sprites)
         self.SPAWN_ID = 4
-        pygame.time.set_timer(self.SPAWN_ID, 10000)
+        pygame.time.set_timer(self.SPAWN_ID, 1000000)
 
     def hero_updater(self):
         self.hero.update()

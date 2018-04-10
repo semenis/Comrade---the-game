@@ -16,6 +16,7 @@ points = [1, 5, 20, 50, 100, 500, 1000, 5000]
 rangs = {0: 'comrade robot', 10: 'Private', 30: 'Ensign', 50: 'Lieutenant', 100: 'Commandante', 500: 'Captain',
          2000: 'Red Army General', 5000: 'Marshall with Lenin orden'}
 
+
 def finder(long_lan):
     geocoder_request = "http://geocode-maps.yandex.ru/1.x/?geocode={0}&format=json".format(long_lan)
 
@@ -31,10 +32,10 @@ def finder(long_lan):
             # Согласно описанию ответа он находится по следующему пути:
             toponym = json_response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
             # Полный адрес топонима:
-            #print(toponym)
+            # print(toponym)
             ret = toponym['metaDataProperty']['GeocoderMetaData']['text']
 
-            #print(ret)
+            # print(ret)
             return (ret)
         else:
             return ("Ошибка выполнения запроса:")
@@ -148,11 +149,12 @@ def gps(bot, update):
 
     update.message.reply_text('Последник раз вы замечены в : ' + str(coords))
     try:
-        adr = finder(str(coords[0])+','+str(coords[1]))
-        bot.send_venue(update.message.chat.id, latitude=coords[1], longitude=coords[0], title='Coords', address=adr)
+
+        bot.send_venue(update.message.chat.id, latitude=coords[1], longitude=coords[0], title='Coords',
+                       address=finder(str(coords[0]) + ',' + str(coords[1])))
     except Exception as e:
         print(e)
-    update.message.reply_text('По адресу ' + finder(str(coords[0])+','+str(coords[1])))
+
 
 # Запускаем функцию main() в случае запуска скрипта.
 if __name__ == '__main__':

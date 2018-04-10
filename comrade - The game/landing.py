@@ -6,9 +6,10 @@ import _thread
 
 spn = 25
 import scoreworking
+
 a = scoreworking.downloadscore()
 lon, lat = a['current coordinats']
-#lon, lat = 13.406888, 52.517481
+# lon, lat = 13.406888, 52.517481
 
 from desanting import desanting
 
