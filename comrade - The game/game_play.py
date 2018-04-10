@@ -7,6 +7,7 @@ import copy
 import threading
 import random
 
+
 def map_request(lon, lat, layer, spn):
     try:
         api_server = "http://static-maps.yandex.ru/1.x/"
@@ -148,7 +149,7 @@ class Hero(Everything):
             old_center = ((self.rect.x + self.rect.w // 2), (self.rect.y + self.rect.h // 2))
             new_center = ((self.rect.x + rect1.w // 2), (self.rect.y + rect1.h // 2))
             coors = (
-            self.old_rect.x - (new_center[0] - old_center[0]), self.old_rect.y - (new_center[1] - old_center[1]))
+                self.old_rect.x - (new_center[0] - old_center[0]), self.old_rect.y - (new_center[1] - old_center[1]))
             self.rect.x = coors[0]
             self.rect.y = coors[1]
             self.motion = False
@@ -192,11 +193,11 @@ class Hero(Everything):
             # changed = True
 
         elif self.pressed == pygame.K_LEFT:
-                self.old_rect.x -= delta_x
-                self.old_rect.y += delta_y
+            self.old_rect.x -= delta_x
+            self.old_rect.y += delta_y
 
-                self.rect.x -= delta_x
-                self.rect.y += delta_y
+            self.rect.x -= delta_x
+            self.rect.y += delta_y
 
         elif self.pressed == pygame.K_UP:
             self.old_rect.x += delta_x
@@ -234,7 +235,7 @@ class Hero(Everything):
             self.response = map_request(self.lon, self.lat, self.layer, self.spn)
             write_image(self.response)
             self.location = load_image("map.png")
-            self.rect.x, self.rect.y = self.center[0] - self.rect.w//2, self.center[1] - self.rect.h//2
+            self.rect.x, self.rect.y = self.center[0] - self.rect.w // 2, self.center[1] - self.rect.h // 2
             # self.rect.right = self.rect.x + self.rect.w
             # self.rect.bottom = self.rect.y + self.rect.h
             self.old_rect = copy.deepcopy(self.rect)
@@ -295,7 +296,8 @@ class Enemy(Everything):
                 old_center = ((self.rect.x + self.rect.w // 2), (self.rect.y + self.rect.h // 2))
                 new_center = ((self.rect.x + rect1.w // 2), (self.rect.y + rect1.h // 2))
                 coors = (
-                    self.old_rect.x - (new_center[0] - old_center[0]), self.old_rect.y - (new_center[1] - old_center[1]))
+                    self.old_rect.x - (new_center[0] - old_center[0]),
+                    self.old_rect.y - (new_center[1] - old_center[1]))
                 self.rect.x = coors[0]
                 self.rect.y = coors[1]
             except:
@@ -341,7 +343,7 @@ class Game_play:
         self.enemies = []
         self.all_sprites = pygame.sprite.Group()
         self.surface = surface
-        self.center = (size[0]//2, size[1]//2)
+        self.center = (size[0] // 2, size[1] // 2)
         self.size = size
 
         self.Bullets = pygame.sprite.Group()
@@ -382,9 +384,11 @@ class Game_play:
 
         if len(self.enemies) < 1 and event.type == self.SPAWN_ID:
             for i in range(random.randint(0, 3)):  # def __init__(self, *group, health, coors, direction):
-                Enemy(self.enemies, self.all_sprites, size=self.size, Bullets=self.Bullets, all_sprites=self.all_sprites,
+                Enemy(self.enemies, self.all_sprites, size=self.size, Bullets=self.Bullets,
+                      all_sprites=self.all_sprites,
                       health=random.randint(10, 40), surface=self.surface, coors=(random.randint(0, self.size[0]),
-                                                             random.randint(0, self.size[1])), hero=self.hero)
+                                                                                  random.randint(0, self.size[1])),
+                      hero=self.hero)
 
     def render(self):
         # for unit in self.enemies:
