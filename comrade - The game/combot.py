@@ -146,14 +146,16 @@ def gps(bot, update):
     a = scoreworking.downloadscore()
 
     coords = a['current coordinats']
-
+    adr = finder(str(coords[0]) + ',' + str(coords[1]))
     update.message.reply_text('Последник раз вы замечены в : ' + str(coords))
     try:
 
         bot.send_venue(update.message.chat.id, latitude=coords[1], longitude=coords[0], title='Coords',
-                       address=finder(str(coords[0]) + ',' + str(coords[1])))
+                       address=adr)
     except Exception as e:
         print(e)
+    update.message.reply_text('По адресу ' + adr)
+
 
 
 # Запускаем функцию main() в случае запуска скрипта.
