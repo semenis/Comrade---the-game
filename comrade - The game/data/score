@@ -1,1 +1,3 @@
-{'kills': 141, 'desanting times': 2, 'rang': 'Marshall with Lenin orden', 'exp': 14100, 'current coordinats': (13.406888, 52.517393999999996)}
+
+{'kills': 0, 'desanting times': 0, 'rang': 'comrade robot', 'exp': 0, 'current coordinats': (13.406888, 52.517694)}
+#При изменении количества значений, измените значения по умолчанию в scoreworking.py
