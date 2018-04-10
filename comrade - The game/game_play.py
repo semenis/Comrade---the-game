@@ -256,7 +256,7 @@ class Loot(Everything):
 
 class Enemy(Everything):
     def __init__(self, *group, health, surface, size, Bullets, all_sprites, coors, hero):
-        self.CONST_SPEED = 3
+        self.CONST_SPEED = 2
         self.hero = hero
         self.surface = surface
         self.images = ['Enemies/Enemy.png']
@@ -284,7 +284,7 @@ class Enemy(Everything):
                 if self.health < 1:
                     self.kill()
                 bullet.kill()
-        if event.type == 2:
+        if event.type == 2 and event.type != pygame.MOUSEMOTION:
             try:
                 self.direction = -int(math.degrees(math.atan2(self.rect.center[1] - event.pos[1],
                                                               self.rect.center[0] - event.pos[0]))) + 90
@@ -422,4 +422,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
