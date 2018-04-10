@@ -239,9 +239,10 @@ class Hero(Everything):
             # self.rect.right = self.rect.x + self.rect.w
             # self.rect.bottom = self.rect.y + self.rect.h
             self.old_rect = copy.deepcopy(self.rect)
-
-            # TODO import scoreworking
-            # scoreworking, scoresetvalue((coord[0], coord[1]), 'current coordinats')
+            #print(self.lon, self.lat)
+            # TODO import scoreworking #I AM DO IT!
+            import scoreworking
+            scoreworking.scoresetvalue((self.lon, self.lat), 'current coordinats')
             # (13.406888, 52.517694)
 
     def render(self):
