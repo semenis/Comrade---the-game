@@ -44,6 +44,32 @@ def finder(long_lan):
     except:
         return ("Запрос не удалось выполнить. Проверьте наличие сети Интернет.")
 
+def finder_place(name):
+    geocoder_request = "http://geocode-maps.yandex.ru/1.x/?geocode={0}&format=json".format(name)
+
+    # Выполняем запрос.
+    response = None
+    try:
+        response = requests.get(geocoder_request)
+        if response:
+            # Преобразуем ответ в json-объект
+            json_response = response.json()
+
+            # Получаем первый топоним из ответа геокодера.
+            # Согласно описанию ответа он находится по следующему пути:
+            toponym = json_response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
+            # Полный адрес топонима:
+            toponym_address = toponym["metaDataProperty"]["GeocoderMetaData"]["text"]
+            # Координаты центра топонима:
+            toponym_coodrinates = toponym["Point"]["pos"]
+            # Печатаем извлеченные из ответа поля:
+            return (toponym_coodrinates.split())
+        else:
+            return ("Ошибка выполнения запроса:")
+            print(geocoder_request)
+            print("Http статус:", response.status_code, "(", response.reason, ")")
+    except:
+        return ("Запрос не удалось выполнить. Проверьте наличие сети Интернет.")
 
 # Определяем функцию-обработчик сообщений.
 # У нее два параметра, сам бот и класс updater, принявший сообщение.
@@ -157,6 +183,9 @@ def gps(bot, update):
     update.message.reply_text('По адресу ' + adr)
 
 
+#def teleport(bot, update):
+  #  import scoreworking
+   #TODO Добавить фунционал для выбора места следующего десанта с помощью finder_place/
 
 # Запускаем функцию main() в случае запуска скрипта.
 if __name__ == '__main__':
