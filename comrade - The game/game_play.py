@@ -407,7 +407,9 @@ def main():
     pygame.display.set_icon(pygame.image.load('data/icon.png'))
 
     spn = 0.001
-    lon, lat = 13.406888, 52.517694
+    import scoreworking
+    a = scoreworking.downloadscore()
+    lon, lat = a['current coordinats']
     layer = ('map', 'sat', 'skl')
     game = Game_play(size, screen, lon, lat, layer[1], spn)
     TIMER_ID = 10
