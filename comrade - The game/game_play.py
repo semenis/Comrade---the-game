@@ -421,6 +421,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                pygame.quit()
                 sys.exit(0)
 
             game.update(event)
